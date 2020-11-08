@@ -6,8 +6,8 @@ export const CREATE_LOTTERY_EVENT = 'CREATE_LOTTERY_EVENT';
 export const REFRESH_LOTTERY_EVENT = 'REFRESH_LOTTERY_EVENT';
 export const PARTICIPATE_LOTTERY_SUCCESS = 'PARTICIPATE_LOTTERY_SUCCESS';
 export const GET_OR_UPDATE_EVENT_SUCCESS = 'GET_OR_UPDATE_EVENT_SUCCESS';
-
-export const API_SERVER_BASE_URL = 'http://127.0.0.1:3000';
+export const VERIFY_LOTTERY_START = 'VERIFY_LOTTERY_START';
+export const API_SERVER_BASE_URL = 'http://127.0.0.1:4141';
 
 // action creators
 export function createLotteryEvent(lottery) {
@@ -25,6 +25,12 @@ export function refreshLotteryEvent(lotteries) {
 export function participateSuccess(lottery) {
     return {
         type: PARTICIPATE_LOTTERY_SUCCESS, payload: lottery
+    }
+}
+
+export function verifyStart(payload) {
+    return {
+        type: VERIFY_LOTTERY_START, payload: payload
     }
 }
 
@@ -56,11 +62,15 @@ export function tryCreateLottery(createLotteryDTO) {
         )
             .catch(err => {
                 dispatch(requestFail(err, false));
-                dispatch(addMessage(err.toString(),'error'))
+                dispatch(addMessage(err.toString(), 'error'))
             }).finally(() => {
                 dispatch(endLoading())
             })
     }
+}
+
+export function tryRefreshMockLotteries() {
+
 }
 
 export function tryRefreshLotteries(startTimestamp, endTimestamp) {
@@ -81,7 +91,7 @@ export function tryRefreshLotteries(startTimestamp, endTimestamp) {
                 })
             ).catch(err => {
                 dispatch(requestFail(err, false));
-                dispatch(addMessage(err.toString(),'error'))
+                dispatch(addMessage(err.toString(), 'error'))
             }).finally(() => {
                 dispatch(endLoading())
             })
@@ -104,13 +114,29 @@ export function tryParticipateLottery(participateDTO) {
         }).then(res => res.json().then(data => {
             dispatch(participateSuccess(data))
         })).catch(res => {
-            res.json().then(body=>{
+            res.json().then(body => {
                 dispatch(requestFail(body, false));
-                dispatch(addMessage(body.message,'error'))
+                dispatch(addMessage(body.message, 'error'))
             })
 
         })
             .finally(() => dispatch(endLoading()))
+
+    }
+}
+
+export function tryVerifyLottery(eventUUID, event, participantUUID) {
+    return (dispatch) => {
+        dispatch(startLoading());
+        if (event.participants.filter(oneParticipant => oneParticipant.participantUUID === participantUUID).length < 1) {
+            dispatch(addMessage("참가자 목록에 없습니다", 'error'))
+        } else {
+            verifyStart({
+                eventUUId: eventUUID,
+                participantUUID: participantUUID,
+            })
+        }
+        dispatch(endLoading());
 
     }
 }
@@ -131,7 +157,7 @@ export function tryGetLottery(UUID) {
             }))
             .catch(err => {
                 dispatch(requestFail(err, false));
-                dispatch(addMessage(err.toString(),'error'))
+                dispatch(addMessage(err.toString(), 'error'))
             })
             .finally(() => dispatch(endLoading()))
 
@@ -158,7 +184,7 @@ export function tryDrawLottery(drawDTO) {
             }))
             .catch(err => {
                 dispatch(requestFail(err, false));
-                dispatch(addMessage(err.toString(),'error'))
+                dispatch(addMessage(err.toString(), 'error'))
             })
             .finally(() => dispatch(endLoading()))
 

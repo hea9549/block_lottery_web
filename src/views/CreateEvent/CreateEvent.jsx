@@ -32,7 +32,7 @@ class CreateEvent extends React.Component {
             eventName: '',
             contents: '',
             deadlineTime: '2017-05-24T00:00',
-            viewDeadlineTime: '2019-01-01T00:00',
+            viewDeadlineTime: '2020-11-05T00:00',
             maxParticipant: 0,
             drawTypes: ['DRAW_BLOCK_HASH'],
             prizes: [{

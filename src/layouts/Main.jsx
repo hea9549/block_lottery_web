@@ -37,12 +37,14 @@ import EventDetail from "../views/EventDetail/EventDetailContainer";
 import {tryCreateLottery} from "../action/lottery";
 import {closeMessage} from "../action/common";
 import connect from "react-redux/es/connect/connect";
+import VerifyDetailContainer from "views/VerifyEvent/VerifyDetailContainer";
 
 let ps;
 
 const switchRoutes = (
     <Switch>
         <Route path="/main/lottery/:UUID" component={EventDetail}/>
+        <Route path="/main/verify/:UUID" component={VerifyDetailContainer}/>
         {routes.map((prop, key) => {
             if (prop.layout === "/main") {
                 return (

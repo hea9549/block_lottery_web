@@ -27,6 +27,7 @@ class EventDetailContainer extends React.Component {
             tryParticipateLottery({
                 eventUUID: eventUUID,
                 participantUUID: data.email ? data.email : authParamList[0],
+                participantEntropy: data.randomEntropy,
                 participantInfo: data.name ? data.name : authParamList[1],
                 authParams: authParamList
             })

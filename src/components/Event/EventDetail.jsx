@@ -50,13 +50,17 @@ export default withStyles(eventDetailStyle)(function (props) {
 
     const {
         classes, eventName, createAt, deadlineTime, maxParticipant, currentParticipant, contents, eventUUID,
-        isOpen, isDrawn, onParticipateClick, onDrawClick,remainTime, prizes, style, authParams,
+        isOpen, isDrawn, onParticipateClick, onDrawClick, remainTime, prizes, style, authParams,
     } = props;
     let inputAuthParams = {};
-    authParams.forEach(v=>{
+    authParams.forEach(v => {
         inputAuthParams[v] = "";
     });
-    const [participantData, setParticipantData] = React.useState({email: '', inputAuthParams: inputAuthParams});
+    const [participantData, setParticipantData] = React.useState({
+        email: '',
+        randomEntropy: '',
+        inputAuthParams: inputAuthParams
+    });
 
     function handleClickOpen() {
         setOpen(true);
@@ -130,15 +134,27 @@ export default withStyles(eventDetailStyle)(function (props) {
                     </DialogContentText>
                     {authParams === null || authParams.length === 0 ?
                         //어스파람없는경우
-                        <TextField
-                            autoFocus
-                            id="email"
-                            label="이메일"
-                            type="email"
-                            value={participantData.email}
-                            onChange={event => setParticipantData({...participantData, email: event.target.value})}
-                            fullWidth
-                        />
+                        <div>
+                            <TextField
+                                autoFocus
+                                id="email"
+                                label="이메일"
+                                type="email"
+                                value={participantData.email}
+                                onChange={event => setParticipantData({...participantData, email: event.target.value})}
+                                fullWidth
+                            />
+                            <TextField
+                                autoFocus
+                                id="randomEntropy"
+                                label="사용자 참여 무작위값"
+                                type="text"
+                                value={participantData.randomEntropy}
+                                onChange={event => setParticipantData({...participantData, randomEntropy: event.target.value})}
+                                fullWidth
+                            />
+                        </div>
+
                         :
                         authParams.map((oneAuthParam, idx) => {
                             return (
@@ -150,10 +166,12 @@ export default withStyles(eventDetailStyle)(function (props) {
                                     type="text"
                                     onChange={event => {
                                         const data = event.target.value;
-                                        setParticipantData({...participantData,inputAuthParams: {
+                                        setParticipantData({
+                                            ...participantData, inputAuthParams: {
                                                 ...participantData.inputAuthParams,
-                                                [oneAuthParam]:data
-                                            }})
+                                                [oneAuthParam]: data
+                                            }
+                                        })
                                     }
                                     }
                                     value={participantData.inputAuthParams[oneAuthParam]}

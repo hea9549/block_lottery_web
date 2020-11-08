@@ -26,6 +26,7 @@ import DashboardPage from "views/Dashboard/Dashboard.jsx";
 import Icons from "views/Icons/Icons.jsx";
 import CreateEvent from "views/CreateEvent/CreateEvent";
 import EventList from "./views/EventList/EventList";
+import VerifyEventList from "./views/VerifyEvent/EventList";
 import {CheckCircle, SettingsApplications} from "@material-ui/icons";
 // core components/views for RTL layout
 
@@ -55,7 +56,7 @@ const dashboardRoutes = [
         path: "/verify",
         name: "Verify Event",
         icon: CheckCircle,
-        component: EventList,
+        component: VerifyEventList,
         layout: "/main"
     },
     {
